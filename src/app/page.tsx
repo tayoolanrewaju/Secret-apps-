@@ -20,9 +20,9 @@ export default function HomePage() {
             <span className="eyebrow">Your private social hub</span>
             <h1>Orbit</h1>
             <p>
-              Quick access to Snapchat, TikTok, and Instagram — with deep-link
-              launches, a PIN-locked credential vault, and rotatable entry
-              links.
+              Quick access to Snapchat, TikTok, and Instagram — each opens as
+              its own page inside Orbit, with a PIN-locked credential vault and
+              rotatable entry links.
             </p>
             <div className="cta-row">
               <Link href="/hub" className="btn-primary">
@@ -33,21 +33,15 @@ export default function HomePage() {
               </a>
             </div>
           </div>
-
-          <p className="landing-foot">
-            Built for personal use. Device Screen Time and household rules still
-            apply — Orbit cannot override them. Deep links only work when the
-            official apps are installed.
-          </p>
         </div>
       </section>
 
       <section id="features" className="feature-strip">
         <article>
-          <h2>Deep-link launching</h2>
+          <h2>In-site app pages</h2>
           <p>
-            Each icon tries the official app URL first, then falls back to the
-            web if the app is missing or the OS blocks the launch.
+            Tap Snapchat, TikTok, or Instagram and stay on Orbit — each opens
+            its own page on this site instead of leaving for another app.
           </p>
         </article>
         <article>

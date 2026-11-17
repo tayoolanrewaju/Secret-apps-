@@ -6,7 +6,7 @@ export default function HubPage() {
   return (
     <HubShell
       title="Home"
-      subtitle="Tap a platform to open its app. Keep Snapchat, TikTok, and Instagram one tap away."
+      subtitle="Tap a platform to open its page inside Orbit — you stay on this site."
       active="home"
     >
       <div className="account-strip">

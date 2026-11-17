@@ -34,14 +34,3 @@ export function HubNav({ active }: { active: "home" | "vault" | "links" }) {
     </nav>
   );
 }
-
-export function NoticeBanner() {
-  return (
-    <aside className="notice-banner" role="note">
-      <strong>Device limits still apply.</strong> Orbit cannot override Screen
-      Time or app limits. Deep links only open apps that are already installed,
-      and some platforms may restrict them. Follow your device and household
-      rules.
-    </aside>
-  );
-}

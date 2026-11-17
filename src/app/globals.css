@@ -355,20 +355,37 @@ select {
   font-size: 0.9rem;
 }
 
-.notice-banner {
-  margin-top: 1.5rem;
-  padding: 1rem 1.1rem;
-  border-left: 3px solid var(--accent-warm);
-  border-radius: 0 var(--radius) var(--radius) 0;
-  background: rgba(224, 122, 58, 0.08);
-  color: var(--ink-soft);
-  font-size: 0.9rem;
-  line-height: 1.45;
-  animation: rise 700ms ease 180ms both;
+.platform-app {
+  display: grid;
+  gap: 1rem;
+  animation: rise 560ms ease both;
 }
 
-.notice-banner strong {
-  color: var(--accent-warm);
+.platform-app-hero {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.1rem 0 0.35rem;
+}
+
+.platform-app-mark {
+  width: 3.8rem;
+  height: 3.8rem;
+  font-size: 1.55rem;
+}
+
+.platform-app-title {
+  margin: 0.2rem 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: -0.03em;
+}
+
+.platform-app-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
 }
 
 .panel-form,

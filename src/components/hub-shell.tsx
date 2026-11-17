@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { BrandMark, HubNav, NoticeBanner } from "@/components/site-chrome";
+import { BrandMark, HubNav } from "@/components/site-chrome";
 
 export function HubShell({
   title,
@@ -28,7 +28,6 @@ export function HubShell({
           <p>{subtitle}</p>
         </div>
         {children}
-        <NoticeBanner />
       </main>
     </div>
   );
