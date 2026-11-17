@@ -1,7 +1,10 @@
 import { nanoid } from "nanoid";
 import { getViewer, jsonNoStore, ownerKey } from "@/lib/auth";
+import { assertSameOrigin } from "@/lib/csrf";
 import { sql } from "@/lib/db";
 import { isPlatformId } from "@/lib/platforms";
+
+export const runtime = "nodejs";
 
 type CredentialRow = {
   id: string;
@@ -43,6 +46,9 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const csrf = assertSameOrigin(request);
+  if (csrf) return csrf;
+
   const viewer = await getViewer();
   if (!viewer.verified) {
     return jsonNoStore({ error: "unauthorized" }, { status: 401 });
@@ -111,6 +117,9 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const csrf = assertSameOrigin(request);
+  if (csrf) return csrf;
+
   const viewer = await getViewer();
   if (!viewer.verified) {
     return jsonNoStore({ error: "unauthorized" }, { status: 401 });

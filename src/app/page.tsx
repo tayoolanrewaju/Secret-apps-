@@ -17,15 +17,14 @@ export default function HomePage() {
           </div>
 
           <div className="landing-hero">
-            <span className="eyebrow">Your private social hub</span>
+            <span className="eyebrow">Private social hub</span>
             <h1>Orbit</h1>
             <p>
-              Quick access to Snapchat, TikTok, and Instagram — each opens as
-              its own page inside Orbit, with a PIN-locked credential vault and
-              rotatable entry links.
+              Snapchat, TikTok, and Instagram in one place — each opens as a
+              page inside Orbit, with a PIN vault for your logins.
             </p>
             <div className="cta-row">
-              <Link href="/hub" className="btn-primary">
+              <Link href="/hub" className="btn-primary" prefetch>
                 Open your hub
               </Link>
               <a href="#features" className="btn-ghost">
@@ -38,24 +37,24 @@ export default function HomePage() {
 
       <section id="features" className="feature-strip">
         <article>
-          <h2>In-site app pages</h2>
+          <h2>Stay on Orbit</h2>
           <p>
-            Tap Snapchat, TikTok, or Instagram and stay on Orbit — each opens
-            its own page on this site instead of leaving for another app.
+            Tap a platform and open its page on this site. Nothing jumps out to
+            another app.
           </p>
         </article>
         <article>
           <h2>Credential vault</h2>
           <p>
-            Your Cursor sign-in is the hub account. Inside, a master PIN encrypts
-            each platform login before it is stored server-side.
+            Your Cursor sign-in is the hub account. A master PIN encrypts each
+            platform login before it is stored.
           </p>
         </article>
         <article>
           <h2>Rotatable links</h2>
           <p>
-            Mint fresh personal URLs that point to the same hub, and retire old
-            ones whenever you want a new entry address.
+            Mint personal URLs that open the same hub, and retire them whenever
+            you want a fresh entry address.
           </p>
         </article>
       </section>

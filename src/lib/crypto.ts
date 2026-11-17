@@ -31,7 +31,7 @@ async function deriveKey(pin: string, saltBase64: string): Promise<CryptoKey> {
     {
       name: "PBKDF2",
       salt: fromBase64(saltBase64),
-      iterations: 210_000,
+      iterations: 120_000,
       hash: "SHA-256",
     },
     material,

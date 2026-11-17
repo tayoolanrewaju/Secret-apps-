@@ -1,5 +1,7 @@
 import { getViewer, jsonNoStore } from "@/lib/auth";
 
+export const runtime = "nodejs";
+
 export async function GET() {
   const viewer = await getViewer();
   if (!viewer.verified) {

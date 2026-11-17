@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties, type FormEvent } from "react";
 import {
+  createSalt,
   decryptPayload,
   encryptPayload,
-  createSalt,
   VERIFIER_PAYLOAD,
 } from "@/lib/crypto";
 import type { Platform } from "@/lib/platforms";
+import { getVaultPin, setVaultPin } from "@/lib/vault-session";
 
 type VaultState =
   | { status: "loading" }
@@ -29,8 +30,6 @@ type StoredCredential = {
 };
 
 type Revealed = { username: string; password: string };
-
-const SESSION_KEY = "orbit-vault-pin";
 
 export function PlatformAppPanel({ platform }: { platform: Platform }) {
   const [vault, setVault] = useState<VaultState>({ status: "loading" });
@@ -54,7 +53,7 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
         return;
       }
 
-      const savedPin = sessionStorage.getItem(SESSION_KEY);
+      const savedPin = getVaultPin();
       if (savedPin) {
         try {
           await decryptPayload(
@@ -66,7 +65,7 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
           setVault({ status: "unlocked", salt: data.salt, pin: savedPin });
           return;
         } catch {
-          sessionStorage.removeItem(SESSION_KEY);
+          setVaultPin(null);
         }
       }
 
@@ -85,15 +84,20 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
       setRevealed(null);
       return;
     }
+    let cancelled = false;
     void (async () => {
       const res = await fetch("/api/credentials", { cache: "no-store" });
-      if (!res.ok) return;
+      if (!res.ok || cancelled) return;
       const data = await res.json();
+      if (cancelled) return;
       const row = (data.credentials as StoredCredential[] | undefined)?.find(
         (item) => item.platform === platform.id,
       );
       setCredential(row ?? null);
     })();
+    return () => {
+      cancelled = true;
+    };
   }, [vault, platform.id]);
 
   async function setupVault(event: FormEvent) {
@@ -117,7 +121,7 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
         }),
       });
       if (!res.ok) throw new Error("setup_failed");
-      sessionStorage.setItem(SESSION_KEY, pin);
+      setVaultPin(pin);
       setVault({ status: "unlocked", salt, pin });
       setPin("");
     } catch {
@@ -139,7 +143,7 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
         vault.verifierCiphertext,
         vault.verifierIv,
       );
-      sessionStorage.setItem(SESSION_KEY, pin);
+      setVaultPin(pin);
       setVault({ status: "unlocked", salt: vault.salt, pin });
       setPin("");
     } catch {
@@ -181,7 +185,7 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
         iv: encrypted.iv,
       });
       setForm({ username: "", password: "", label: "" });
-      setMessage("Saved for this platform.");
+      setMessage("Saved.");
     } catch {
       setMessage("Could not save those credentials.");
     } finally {
@@ -200,33 +204,35 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
       );
       setRevealed(payload);
     } catch {
-      setMessage("Could not decrypt. Unlock again from Vault.");
+      setMessage("Could not decrypt. Unlock again.");
     }
   }
 
   return (
     <div className="platform-app">
       <div
-        className="platform-app-hero"
+        className="platform-stage"
         style={{ "--accent": platform.accent } as CSSProperties}
       >
-        <span
-          className="platform-orb platform-app-mark"
-          style={
-            platform.id === "snapchat" ? { color: "#132833" } : undefined
-          }
-          aria-hidden
-        >
-          {platform.mark}
-        </span>
-        <div>
-          <p className="eyebrow">{platform.name}</p>
-          <h2 className="platform-app-title">{platform.name} in Orbit</h2>
-          <p className="muted">
-            This page stays inside Orbit. Use your saved login here when you
-            need it — no jump to a native app.
-          </p>
+        <div className="platform-app-hero">
+          <span
+            className="platform-orb platform-app-mark"
+            style={
+              platform.id === "snapchat" ? { color: "#132833" } : undefined
+            }
+            aria-hidden
+          >
+            {platform.mark}
+          </span>
+          <div>
+            <p className="eyebrow">{platform.name}</p>
+            <h2 className="platform-app-title">{platform.name}</h2>
+          </div>
         </div>
+        <p>
+          You’re still in Orbit. This is your {platform.name} space on this
+          site — reveal a saved login or store a new one below.
+        </p>
       </div>
 
       <div className="platform-app-actions">
@@ -248,8 +254,7 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
         <form className="panel-form" onSubmit={setupVault}>
           <h2>Create vault PIN</h2>
           <p className="muted">
-            Set a master PIN once, then save {platform.name} credentials on this
-            page.
+            One master PIN protects every platform login saved in Orbit.
           </p>
           <label>
             Master PIN
@@ -273,7 +278,7 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
         <form className="panel-form" onSubmit={unlockVault}>
           <h2>Unlock vault</h2>
           <p className="muted">
-            Enter your master PIN to show or save {platform.name} login details.
+            Enter your master PIN to use {platform.name} credentials here.
           </p>
           <label>
             Master PIN
@@ -295,9 +300,9 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
       {vault.status === "unlocked" ? (
         <div className="vault-layout">
           <section className="panel-form">
-            <h2>Saved {platform.name} login</h2>
+            <h2>Saved login</h2>
             {!credential ? (
-              <p className="muted">Nothing saved for this platform yet.</p>
+              <p className="muted">Nothing saved for {platform.name} yet.</p>
             ) : revealed ? (
               <div className="revealed-block">
                 {credential.label ? (
@@ -313,7 +318,11 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
                 </p>
               </div>
             ) : (
-              <button type="button" className="btn-primary" onClick={() => void reveal()}>
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={() => void reveal()}
+              >
                 Reveal login
               </button>
             )}
@@ -326,7 +335,10 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
               <input
                 value={form.label}
                 onChange={(event) =>
-                  setForm((current) => ({ ...current, label: event.target.value }))
+                  setForm((current) => ({
+                    ...current,
+                    label: event.target.value,
+                  }))
                 }
                 placeholder="Optional note"
               />

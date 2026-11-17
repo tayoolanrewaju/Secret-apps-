@@ -8,6 +8,7 @@ import {
   VERIFIER_PAYLOAD,
 } from "@/lib/crypto";
 import { PLATFORMS, type PlatformId } from "@/lib/platforms";
+import { getVaultPin, setVaultPin } from "@/lib/vault-session";
 
 type VaultState =
   | { status: "loading" }
@@ -34,8 +35,6 @@ type Revealed = {
   password: string;
 };
 
-const SESSION_KEY = "orbit-vault-pin";
-
 async function readVaultState(): Promise<VaultState> {
   const res = await fetch("/api/vault", { cache: "no-store" });
   if (!res.ok) {
@@ -47,7 +46,7 @@ async function readVaultState(): Promise<VaultState> {
   const data = await res.json();
   if (!data.configured) return { status: "needs_setup" };
 
-  const savedPin = sessionStorage.getItem(SESSION_KEY);
+  const savedPin = getVaultPin();
   if (savedPin) {
     try {
       await decryptPayload(
@@ -58,7 +57,7 @@ async function readVaultState(): Promise<VaultState> {
       );
       return { status: "unlocked", salt: data.salt, pin: savedPin };
     } catch {
-      sessionStorage.removeItem(SESSION_KEY);
+      setVaultPin(null);
     }
   }
 
@@ -142,7 +141,7 @@ export function VaultPanel() {
         }),
       });
       if (!res.ok) throw new Error("setup_failed");
-      sessionStorage.setItem(SESSION_KEY, setupPin);
+      setVaultPin(setupPin);
       setVault({ status: "unlocked", salt, pin: setupPin });
       setCredentials([]);
       setSetupPin("");
@@ -165,7 +164,7 @@ export function VaultPanel() {
         vault.verifierCiphertext,
         vault.verifierIv,
       );
-      sessionStorage.setItem(SESSION_KEY, unlockPin);
+      setVaultPin(unlockPin);
       setVault({ status: "unlocked", salt: vault.salt, pin: unlockPin });
       setCredentials(await readCredentials());
       setUnlockPin("");
@@ -177,7 +176,7 @@ export function VaultPanel() {
   }
 
   function lockVault() {
-    sessionStorage.removeItem(SESSION_KEY);
+    setVaultPin(null);
     setRevealed({});
     setCredentials([]);
     void refreshVault();
@@ -261,13 +260,6 @@ export function VaultPanel() {
     return (
       <div className="panel-form">
         <p className="muted">Opening vault…</p>
-        <button
-          type="button"
-          className="btn-ghost"
-          onClick={() => void refreshVault()}
-        >
-          Retry
-        </button>
       </div>
     );
   }
@@ -345,7 +337,7 @@ export function VaultPanel() {
   return (
     <div className="vault-layout">
       <div className="vault-toolbar">
-        <p className="muted">Vault unlocked for this browser tab.</p>
+        <p className="muted">Vault unlocked for this visit.</p>
         <button type="button" className="btn-ghost" onClick={lockVault}>
           Lock
         </button>

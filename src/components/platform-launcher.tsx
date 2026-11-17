@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { PLATFORMS } from "@/lib/platforms";
@@ -7,18 +5,13 @@ import { PLATFORMS } from "@/lib/platforms";
 export function PlatformLauncher() {
   return (
     <div className="platform-grid">
-      {PLATFORMS.map((platform, index) => (
+      {PLATFORMS.map((platform) => (
         <Link
           key={platform.id}
           href={`/hub/app/${platform.id}`}
+          prefetch
           className="platform-tile"
-          style={
-            {
-              "--accent": platform.accent,
-              "--glow": platform.glow,
-              animationDelay: `${index * 90}ms`,
-            } as CSSProperties
-          }
+          style={{ "--accent": platform.accent } as CSSProperties}
         >
           <span
             className="platform-orb"
@@ -31,7 +24,10 @@ export function PlatformLauncher() {
           </span>
           <span className="platform-copy">
             <span className="platform-name">{platform.name}</span>
-            <span className="platform-hint">Open in Orbit</span>
+            <span className="platform-hint">Open page</span>
+          </span>
+          <span className="platform-chevron" aria-hidden>
+            ›
           </span>
         </Link>
       ))}
