@@ -17,25 +17,27 @@ export default function HomePage() {
           </div>
 
           <div className="landing-hero">
-            <span className="eyebrow">Private social hub</span>
+            <span className="eyebrow">Your private social hub</span>
             <h1>Orbit</h1>
             <p>
-              One neat dock for Snapchat, TikTok, and Instagram — deep-link
-              launches, a personal credential vault, and rotatable entry links.
+              Quick access to Snapchat, TikTok, and Instagram — with deep-link
+              launches, a PIN-locked credential vault, and rotatable entry
+              links.
             </p>
             <div className="cta-row">
               <Link href="/hub" className="btn-primary">
                 Open your hub
               </Link>
               <a href="#features" className="btn-ghost">
-                See what’s inside
+                How it works
               </a>
             </div>
           </div>
 
           <p className="landing-foot">
             Built for personal use. Device Screen Time and household rules still
-            apply — Orbit cannot override them.
+            apply — Orbit cannot override them. Deep links only work when the
+            official apps are installed.
           </p>
         </div>
       </section>
@@ -44,15 +46,15 @@ export default function HomePage() {
         <article>
           <h2>Deep-link launching</h2>
           <p>
-            Each icon tries the official app URL first, so installed apps can
-            open directly instead of the mobile website.
+            Each icon tries the official app URL first, then falls back to the
+            web if the app is missing or the OS blocks the launch.
           </p>
         </article>
         <article>
           <h2>Credential vault</h2>
           <p>
-            Store platform logins behind your own PIN. Secrets are encrypted in
-            the browser before they ever reach storage.
+            Your Cursor sign-in is the hub account. Inside, a master PIN encrypts
+            each platform login before it is stored server-side.
           </p>
         </article>
         <article>

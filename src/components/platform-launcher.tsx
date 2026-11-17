@@ -5,18 +5,35 @@ import { PLATFORMS, type Platform } from "@/lib/platforms";
 
 function launchPlatform(platform: Platform) {
   const started = Date.now();
+  let fellBack = false;
+
+  const goWeb = () => {
+    if (fellBack) return;
+    fellBack = true;
+    window.location.href = platform.webFallback;
+  };
+
   const fallback = window.setTimeout(() => {
-    if (Date.now() - started < 1600 && document.visibilityState === "visible") {
-      window.location.href = platform.webFallback;
+    if (document.visibilityState === "visible" && Date.now() - started < 1800) {
+      goWeb();
     }
-  }, 900);
+  }, 1000);
 
   const onHide = () => {
-    window.clearTimeout(fallback);
-    document.removeEventListener("visibilitychange", onHide);
+    if (document.visibilityState === "hidden") {
+      window.clearTimeout(fallback);
+      document.removeEventListener("visibilitychange", onHide);
+    }
   };
   document.addEventListener("visibilitychange", onHide);
-  window.location.href = platform.deepLink;
+
+  // Prefer native scheme; if the browser rejects it, open the web fallback.
+  try {
+    window.location.href = platform.deepLink;
+  } catch {
+    window.clearTimeout(fallback);
+    goWeb();
+  }
 }
 
 export function PlatformLauncher() {
@@ -44,7 +61,15 @@ export function PlatformLauncher() {
           }
           onClick={() => onOpen(platform)}
         >
-          <span className="platform-orb" aria-hidden>
+          <span
+            className="platform-orb"
+            style={
+              platform.id === "snapchat"
+                ? { color: "#132833" }
+                : undefined
+            }
+            aria-hidden
+          >
             {platform.mark}
           </span>
           <span className="platform-copy">

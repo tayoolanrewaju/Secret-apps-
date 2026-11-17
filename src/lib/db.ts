@@ -1,11 +1,18 @@
-import { readdir, readFile } from "node:fs/promises";
+import "server-only";
+import { mkdir, readdir, readFile } from "node:fs/promises";
+import path from "node:path";
 import { PGlite } from "@electric-sql/pglite";
 import pg from "pg";
 
 const databaseUrl = process.env.DATABASE_URL?.trim() ?? "";
 let pool: pg.Pool | undefined;
-let local: Promise<PGlite> | undefined;
-let localChain: Promise<unknown> = Promise.resolve();
+
+type GlobalDb = typeof globalThis & {
+  __orbitPglite?: Promise<PGlite>;
+  __orbitPgliteChain?: Promise<unknown>;
+};
+
+const g = globalThis as GlobalDb;
 
 export async function sql<T = Record<string, unknown>>(
   text: string,
@@ -16,17 +23,18 @@ export async function sql<T = Record<string, unknown>>(
     return (await pool.query(text, params)).rows as T[];
   }
 
-  local ??= startLocal().catch((error: unknown) => {
-    local = undefined;
+  g.__orbitPglite ??= startLocal().catch((error: unknown) => {
+    g.__orbitPglite = undefined;
     throw error;
   });
+  g.__orbitPgliteChain ??= Promise.resolve();
 
   // PGlite is single-connection; serialize queries in local/dev.
-  const run = localChain.then(async () => {
-    const db = await local!;
+  const run = g.__orbitPgliteChain.then(async () => {
+    const db = await g.__orbitPglite!;
     return (await db.query<T>(text, params)).rows;
   });
-  localChain = run.then(
+  g.__orbitPgliteChain = run.then(
     () => undefined,
     () => undefined,
   );
@@ -34,7 +42,9 @@ export async function sql<T = Record<string, unknown>>(
 }
 
 async function startLocal(): Promise<PGlite> {
-  const db = new PGlite();
+  const dataDir = path.join(process.cwd(), ".data", "pglite");
+  await mkdir(dataDir, { recursive: true });
+  const db = new PGlite(dataDir);
   const files = (await readdir("migrations").catch(() => []))
     .filter((f) => f.endsWith(".sql"))
     .sort();

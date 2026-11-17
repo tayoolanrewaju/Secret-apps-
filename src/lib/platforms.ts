@@ -14,10 +14,10 @@ export const PLATFORMS: Platform[] = [
   {
     id: "snapchat",
     name: "Snapchat",
-    deepLink: "snapchat://",
+    deepLink: "snapchat://add/",
     webFallback: "https://www.snapchat.com/",
-    accent: "#FFFC00",
-    glow: "rgba(255, 252, 0, 0.22)",
+    accent: "#E6D900",
+    glow: "rgba(230, 217, 0, 0.18)",
     mark: "S",
   },
   {
@@ -25,8 +25,8 @@ export const PLATFORMS: Platform[] = [
     name: "TikTok",
     deepLink: "tiktok://",
     webFallback: "https://www.tiktok.com/",
-    accent: "#25F4EE",
-    glow: "rgba(37, 244, 238, 0.2)",
+    accent: "#11C4BE",
+    glow: "rgba(17, 196, 190, 0.16)",
     mark: "T",
   },
   {
@@ -34,8 +34,8 @@ export const PLATFORMS: Platform[] = [
     name: "Instagram",
     deepLink: "instagram://app",
     webFallback: "https://www.instagram.com/",
-    accent: "#FF5C8A",
-    glow: "rgba(255, 92, 138, 0.22)",
+    accent: "#E0537A",
+    glow: "rgba(224, 83, 122, 0.16)",
     mark: "I",
   },
 ];

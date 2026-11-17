@@ -9,7 +9,8 @@ export default function HubPage() {
       subtitle="Tap a platform to open its app. Keep Snapchat, TikTok, and Instagram one tap away."
       active="home"
     >
-      <div className="vault-toolbar" style={{ marginBottom: "1rem" }}>
+      <div className="account-strip">
+        <p>Hub account (Cursor viewer)</p>
         <ViewerChip />
       </div>
       <PlatformLauncher />
