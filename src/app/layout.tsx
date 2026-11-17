@@ -17,11 +17,11 @@ const figtree = Figtree({
 export const metadata: Metadata = {
   title: "Orbit — Private Social Hub",
   description:
-    "A personal quick-access dashboard for Snapchat, TikTok, and Instagram with deep links, a credential vault, and rotatable entry URLs.",
+    "A personal quick-access dashboard for Snapchat, TikTok, and Instagram with in-site app pages, a credential vault, and rotatable entry URLs.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#071018",
+  themeColor: "#eef5f3",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,

@@ -292,8 +292,10 @@ export function VaultPanel() {
       <form className="panel-form" onSubmit={setupVault}>
         <h2>Create your vault PIN</h2>
         <p className="muted">
-          Credentials are encrypted on this device before they are stored. Orbit
-          never sees your PIN or the plain passwords.
+          Your Cursor sign-in is the hub account. This master PIN encrypts
+          Snapchat, TikTok, and Instagram logins in the browser before they are
+          saved to your private vault. Orbit never sees your PIN or plain
+          passwords.
         </p>
         <label>
           Master PIN

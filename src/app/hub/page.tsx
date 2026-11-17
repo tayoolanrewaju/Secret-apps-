@@ -6,10 +6,11 @@ export default function HubPage() {
   return (
     <HubShell
       title="Home"
-      subtitle="Tap a platform to open its app. Keep Snapchat, TikTok, and Instagram one tap away."
+      subtitle="Tap a platform to open its page inside Orbit — you stay on this site."
       active="home"
     >
-      <div className="vault-toolbar" style={{ marginBottom: "1rem" }}>
+      <div className="account-strip">
+        <p>Hub account (Cursor viewer)</p>
         <ViewerChip />
       </div>
       <PlatformLauncher />

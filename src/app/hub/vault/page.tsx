@@ -5,7 +5,7 @@ export default function VaultPage() {
   return (
     <HubShell
       title="Credential vault"
-      subtitle="Save Snapchat, TikTok, and Instagram logins behind your master PIN."
+      subtitle="Hub account is your Cursor sign-in. Set a master PIN, then save each platform login encrypted at rest."
       active="vault"
     >
       <VaultPanel />
