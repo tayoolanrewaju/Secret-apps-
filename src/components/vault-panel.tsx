@@ -122,8 +122,8 @@ export function VaultPanel() {
 
   async function setupVault(event: FormEvent) {
     event.preventDefault();
-    if (setupPin.length < 6) {
-      setMessage("Choose a PIN of at least 6 characters.");
+    if (!/^\d{4}$/.test(setupPin)) {
+      setMessage("Choose a 4-digit PIN.");
       return;
     }
     setBusy(true);
@@ -293,11 +293,16 @@ export function VaultPanel() {
           Master PIN
           <input
             type="password"
+            inputMode="numeric"
             autoComplete="new-password"
-            minLength={6}
+            pattern="\d{4}"
+            maxLength={4}
+            minLength={4}
             value={setupPin}
-            onChange={(event) => setSetupPin(event.target.value)}
-            placeholder="At least 6 characters"
+            onChange={(event) =>
+              setSetupPin(event.target.value.replace(/\D/g, "").slice(0, 4))
+            }
+            placeholder="4 digits"
             required
           />
         </label>
@@ -314,15 +319,22 @@ export function VaultPanel() {
       <form className="panel-form" onSubmit={unlockVault}>
         <h2>Unlock vault</h2>
         <p className="muted">
-          Enter your master PIN to view or edit saved logins.
+          Enter your 4-digit master PIN to view or edit saved logins.
         </p>
         <label>
           Master PIN
           <input
             type="password"
+            inputMode="numeric"
             autoComplete="current-password"
+            pattern="\d{4}"
+            maxLength={4}
+            minLength={4}
             value={unlockPin}
-            onChange={(event) => setUnlockPin(event.target.value)}
+            onChange={(event) =>
+              setUnlockPin(event.target.value.replace(/\D/g, "").slice(0, 4))
+            }
+            placeholder="4 digits"
             required
           />
         </label>
