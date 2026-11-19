@@ -7,6 +7,7 @@ import {
   encryptPayload,
   VERIFIER_PAYLOAD,
 } from "@/lib/crypto";
+import { readApiError } from "@/lib/api-error";
 import { PLATFORMS, type PlatformId } from "@/lib/platforms";
 import { getVaultPin, setVaultPin } from "@/lib/vault-session";
 
@@ -140,7 +141,10 @@ export function VaultPanel() {
           verifierIv: verifier.iv,
         }),
       });
-      if (!res.ok) throw new Error("setup_failed");
+      if (!res.ok) {
+        setMessage(await readApiError(res, "Could not create the vault."));
+        return;
+      }
       setVaultPin(setupPin);
       setVault({ status: "unlocked", salt, pin: setupPin });
       setCredentials([]);
