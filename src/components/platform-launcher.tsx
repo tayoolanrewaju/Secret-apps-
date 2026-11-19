@@ -1,21 +1,17 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { CSSProperties } from "react";
 import { PLATFORMS } from "@/lib/platforms";
 
 export function PlatformLauncher() {
-  const router = useRouter();
-
   return (
     <div className="platform-grid">
       {PLATFORMS.map((platform) => (
-        <button
+        <Link
           key={platform.id}
-          type="button"
+          href={`/hub/app/${platform.id}`}
           className="platform-tile"
           style={{ "--accent": platform.accent } as CSSProperties}
-          onClick={() => router.push(`/hub/app/${platform.id}`)}
+          aria-label={`Open ${platform.name} app page`}
         >
           <span
             className="platform-orb"
@@ -30,10 +26,8 @@ export function PlatformLauncher() {
             <span className="platform-name">{platform.name}</span>
             <span className="platform-hint">Open app page</span>
           </span>
-          <span className="platform-open-btn" aria-hidden>
-            Open
-          </span>
-        </button>
+          <span className="platform-open-btn">Open</span>
+        </Link>
       ))}
     </div>
   );
