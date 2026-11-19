@@ -102,8 +102,8 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
 
   async function setupVault(event: FormEvent) {
     event.preventDefault();
-    if (pin.length < 6) {
-      setMessage("Choose a PIN of at least 6 characters.");
+    if (!/^\d{4}$/.test(pin)) {
+      setMessage("Choose a 4-digit PIN.");
       return;
     }
     setBusy(true);
@@ -254,16 +254,22 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
         <form className="panel-form" onSubmit={setupVault}>
           <h2>Create vault PIN</h2>
           <p className="muted">
-            One master PIN protects every platform login saved in Orbit.
+            One 4-digit master PIN protects every platform login saved in Orbit.
           </p>
           <label>
             Master PIN
             <input
               type="password"
+              inputMode="numeric"
               autoComplete="new-password"
-              minLength={6}
+              pattern="\d{4}"
+              maxLength={4}
+              minLength={4}
               value={pin}
-              onChange={(event) => setPin(event.target.value)}
+              onChange={(event) =>
+                setPin(event.target.value.replace(/\D/g, "").slice(0, 4))
+              }
+              placeholder="4 digits"
               required
             />
           </label>
@@ -278,15 +284,23 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
         <form className="panel-form" onSubmit={unlockVault}>
           <h2>Unlock vault</h2>
           <p className="muted">
-            Enter your master PIN to use {platform.name} credentials here.
+            Enter your 4-digit master PIN to use {platform.name} credentials
+            here.
           </p>
           <label>
             Master PIN
             <input
               type="password"
+              inputMode="numeric"
               autoComplete="current-password"
+              pattern="\d{4}"
+              maxLength={4}
+              minLength={4}
               value={pin}
-              onChange={(event) => setPin(event.target.value)}
+              onChange={(event) =>
+                setPin(event.target.value.replace(/\D/g, "").slice(0, 4))
+              }
+              placeholder="4 digits"
               required
             />
           </label>
