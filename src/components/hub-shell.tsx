@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 import { BrandMark, HubNav } from "@/components/site-chrome";
 
@@ -16,10 +15,10 @@ export function HubShell({
   return (
     <div className="hub-shell">
       <header className="hub-header">
-        <Link href="/" className="brand-lockup">
+        <a href="/" className="brand-lockup">
           <BrandMark size="sm" />
           <span>Orbit</span>
-        </Link>
+        </a>
         <HubNav active={active} />
       </header>
       <main className="hub-main">

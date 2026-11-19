@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState, type CSSProperties, type FormEvent } from "react";
 import {
   createSalt,
@@ -239,30 +238,28 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
         </p>
         <div className="cta-row" style={{ marginTop: "1rem" }}>
           <a href="#vault-panel" className="btn-primary">
-            Continue to {platform.name}
+            Use {platform.name} vault
           </a>
         </div>
       </div>
 
       <div className="platform-app-actions">
-        <Link href="/hub" className="btn-ghost">
+        <a href="/hub" className="btn-ghost">
           Back to dock
-        </Link>
-        <Link href="/hub/vault" className="btn-ghost">
+        </a>
+        <a href="/hub/vault" className="btn-ghost">
           Full vault
-        </Link>
+        </a>
       </div>
 
-      <div id="vault-panel" />
-
       {vault.status === "loading" ? (
-        <div className="panel-form">
+        <div id="vault-panel" className="panel-form">
           <p className="muted">Opening vault…</p>
         </div>
       ) : null}
 
       {vault.status === "needs_setup" ? (
-        <form className="panel-form" onSubmit={setupVault}>
+        <form id="vault-panel" className="panel-form" onSubmit={setupVault}>
           <h2>Create vault PIN</h2>
           <p className="muted">
             One 4-digit master PIN protects every platform login saved in Orbit.
@@ -292,7 +289,7 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
       ) : null}
 
       {vault.status === "locked" ? (
-        <form className="panel-form" onSubmit={unlockVault}>
+        <form id="vault-panel" className="panel-form" onSubmit={unlockVault}>
           <h2>Unlock vault</h2>
           <p className="muted">
             Enter your 4-digit master PIN to use {platform.name} credentials
@@ -323,7 +320,7 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
       ) : null}
 
       {vault.status === "unlocked" ? (
-        <div className="vault-layout">
+        <div id="vault-panel" className="vault-layout">
           <section className="panel-form">
             <h2>Saved login</h2>
             {!credential ? (
