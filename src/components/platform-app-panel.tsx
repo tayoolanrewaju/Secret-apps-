@@ -8,6 +8,7 @@ import {
   encryptPayload,
   VERIFIER_PAYLOAD,
 } from "@/lib/crypto";
+import { readApiError } from "@/lib/api-error";
 import type { Platform } from "@/lib/platforms";
 import { getVaultPin, setVaultPin } from "@/lib/vault-session";
 
@@ -120,12 +121,15 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
           verifierIv: verifier.iv,
         }),
       });
-      if (!res.ok) throw new Error("setup_failed");
+      if (!res.ok) {
+        setMessage(await readApiError(res, "Could not create the vault."));
+        return;
+      }
       setVaultPin(pin);
       setVault({ status: "unlocked", salt, pin });
       setPin("");
     } catch {
-      setMessage("Could not create the vault.");
+      setMessage("Could not create the vault. Try again.");
     } finally {
       setBusy(false);
     }
@@ -230,9 +234,14 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
           </div>
         </div>
         <p>
-          You’re still in Orbit. This is your {platform.name} space on this
-          site — reveal a saved login or store a new one below.
+          You’re still in Orbit. This is your {platform.name} app page — set or
+          unlock your PIN below to use saved logins here.
         </p>
+        <div className="cta-row" style={{ marginTop: "1rem" }}>
+          <a href="#vault-panel" className="btn-primary">
+            Continue to {platform.name}
+          </a>
+        </div>
       </div>
 
       <div className="platform-app-actions">
@@ -243,6 +252,8 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
           Full vault
         </Link>
       </div>
+
+      <div id="vault-panel" />
 
       {vault.status === "loading" ? (
         <div className="panel-form">
