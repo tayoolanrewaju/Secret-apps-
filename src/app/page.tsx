@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { BrandMark } from "@/components/site-chrome";
 import { ViewerChip } from "@/components/viewer-chip";
 
@@ -24,9 +23,9 @@ export default function HomePage() {
               page inside Orbit, with a PIN vault for your logins.
             </p>
             <div className="cta-row">
-              <Link href="/hub" className="btn-primary" prefetch>
+              <a href="/hub" className="btn-primary">
                 Open your hub
-              </Link>
+              </a>
               <a href="#features" className="btn-ghost">
                 How it works
               </a>

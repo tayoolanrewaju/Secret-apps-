@@ -1,12 +1,12 @@
-import Link from "next/link";
 import type { CSSProperties } from "react";
 import { PLATFORMS } from "@/lib/platforms";
 
+/** Plain anchors force a full page load — more reliable on the published apps host than client soft-nav. */
 export function PlatformLauncher() {
   return (
     <div className="platform-grid">
       {PLATFORMS.map((platform) => (
-        <Link
+        <a
           key={platform.id}
           href={`/hub/app/${platform.id}`}
           className="platform-tile"
@@ -24,10 +24,10 @@ export function PlatformLauncher() {
           </span>
           <span className="platform-copy">
             <span className="platform-name">{platform.name}</span>
-            <span className="platform-hint">Open app page</span>
+            <span className="platform-hint">Opens inside Orbit</span>
           </span>
           <span className="platform-open-btn">Open</span>
-        </Link>
+        </a>
       ))}
     </div>
   );
