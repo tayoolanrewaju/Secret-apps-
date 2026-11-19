@@ -1,6 +1,5 @@
 import "server-only";
-import { mkdir, readdir, readFile } from "node:fs/promises";
-import path from "node:path";
+import { readdir, readFile } from "node:fs/promises";
 import { PGlite } from "@electric-sql/pglite";
 import pg from "pg";
 
@@ -29,7 +28,6 @@ export async function sql<T = Record<string, unknown>>(
   });
   g.__orbitPgliteChain ??= Promise.resolve();
 
-  // PGlite is single-connection; serialize queries in local/dev.
   const run = g.__orbitPgliteChain.then(async () => {
     const db = await g.__orbitPglite!;
     return (await db.query<T>(text, params)).rows;
@@ -42,9 +40,9 @@ export async function sql<T = Record<string, unknown>>(
 }
 
 async function startLocal(): Promise<PGlite> {
-  const dataDir = path.join(process.cwd(), ".data", "pglite");
-  await mkdir(dataDir, { recursive: true });
-  const db = new PGlite(dataDir);
+  // In-memory only locally: one process-wide singleton via globalThis.
+  // File-backed PGlite can open twice under Next route workers and lose writes.
+  const db = new PGlite();
   const files = (await readdir("migrations").catch(() => []))
     .filter((f) => f.endsWith(".sql"))
     .sort();

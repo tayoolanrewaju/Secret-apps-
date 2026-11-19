@@ -1,6 +1,9 @@
 import { customAlphabet } from "nanoid";
 import { getViewer, jsonNoStore, ownerKey } from "@/lib/auth";
+import { assertSameOrigin } from "@/lib/csrf";
 import { sql } from "@/lib/db";
+
+export const runtime = "nodejs";
 
 const makeSlug = customAlphabet("abcdefghijkmnopqrstuvwxyz23456789", 10);
 
@@ -40,7 +43,10 @@ export async function GET() {
   });
 }
 
-export async function POST() {
+export async function POST(request: Request) {
+  const csrf = assertSameOrigin(request);
+  if (csrf) return csrf;
+
   const viewer = await getViewer();
   if (!viewer.verified) {
     return jsonNoStore({ error: "unauthorized" }, { status: 401 });
@@ -74,6 +80,9 @@ export async function POST() {
 }
 
 export async function PATCH(request: Request) {
+  const csrf = assertSameOrigin(request);
+  if (csrf) return csrf;
+
   const viewer = await getViewer();
   if (!viewer.verified) {
     return jsonNoStore({ error: "unauthorized" }, { status: 401 });

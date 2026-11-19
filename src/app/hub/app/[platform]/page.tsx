@@ -15,7 +15,7 @@ export default async function PlatformAppPage({
   return (
     <HubShell
       title={platform.name}
-      subtitle={`Stay in Orbit — this is your ${platform.name} page on this site.`}
+      subtitle={`Your ${platform.name} page on Orbit.`}
       active="home"
     >
       <PlatformAppPanel platform={platform} />

@@ -1,5 +1,8 @@
 import { getViewer, jsonNoStore, ownerKey } from "@/lib/auth";
+import { assertSameOrigin } from "@/lib/csrf";
 import { sql } from "@/lib/db";
+
+export const runtime = "nodejs";
 
 type VaultRow = {
   salt: string;
@@ -38,6 +41,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const csrf = assertSameOrigin(request);
+  if (csrf) return csrf;
+
   const viewer = await getViewer();
   if (!viewer.verified) {
     return jsonNoStore({ error: "unauthorized" }, { status: 401 });

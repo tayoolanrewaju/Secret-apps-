@@ -6,11 +6,11 @@ export default function HubPage() {
   return (
     <HubShell
       title="Home"
-      subtitle="Tap a platform to open its page inside Orbit — you stay on this site."
+      subtitle="Pick a platform. Its page opens inside Orbit."
       active="home"
     >
       <div className="account-strip">
-        <p>Hub account (Cursor viewer)</p>
+        <p>Signed in as</p>
         <ViewerChip />
       </div>
       <PlatformLauncher />
