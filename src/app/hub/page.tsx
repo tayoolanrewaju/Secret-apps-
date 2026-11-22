@@ -8,7 +8,7 @@ export default function HubPage() {
   return (
     <HubShell
       title="Home"
-      subtitle="Tap Open — each platform opens its own page inside Orbit."
+      subtitle="Tap Open to launch Snapchat, TikTok, or Instagram on your phone."
       active="home"
     >
       <div className="account-strip">
@@ -17,7 +17,7 @@ export default function HubPage() {
       </div>
       <PlatformLauncher />
       <p className="muted" style={{ marginTop: "1rem" }}>
-        Or open directly:{" "}
+        Saved logins:{" "}
         <a href="/hub/app/snapchat">Snapchat</a>
         {" · "}
         <a href="/hub/app/tiktok">TikTok</a>

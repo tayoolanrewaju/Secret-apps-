@@ -1,33 +1,51 @@
-import type { CSSProperties } from "react";
-import { PLATFORMS } from "@/lib/platforms";
+"use client";
 
-/** Plain anchors force a full page load — more reliable on the published apps host than client soft-nav. */
+import { useState, type CSSProperties } from "react";
+import { openPlatformApp, PLATFORMS } from "@/lib/platforms";
+
 export function PlatformLauncher() {
+  const [pressed, setPressed] = useState<string | null>(null);
+
   return (
     <div className="platform-grid">
-      {PLATFORMS.map((platform) => (
-        <a
-          key={platform.id}
-          href={`/hub/app/${platform.id}`}
-          className="platform-tile"
-          style={{ "--accent": platform.accent } as CSSProperties}
-          aria-label={`Open ${platform.name} app page`}
-        >
-          <span
-            className="platform-orb"
+      {PLATFORMS.map((platform, index) => (
+        <div key={platform.id} className="platform-tile-wrap">
+          <button
+            type="button"
+            className={`platform-tile ${pressed === platform.id ? "is-pressed" : ""}`}
             style={
-              platform.id === "snapchat" ? { color: "#132833" } : undefined
+              {
+                "--accent": platform.accent,
+                "--glow": platform.glow,
+                animationDelay: `${index * 90}ms`,
+              } as CSSProperties
             }
-            aria-hidden
+            aria-label={`Open ${platform.name}`}
+            onClick={() => {
+              setPressed(platform.id);
+              openPlatformApp(platform);
+              window.setTimeout(() => setPressed(null), 800);
+            }}
           >
-            {platform.mark}
-          </span>
-          <span className="platform-copy">
-            <span className="platform-name">{platform.name}</span>
-            <span className="platform-hint">Opens inside Orbit</span>
-          </span>
-          <span className="platform-open-btn">Open</span>
-        </a>
+            <span
+              className="platform-orb"
+              style={
+                platform.id === "snapchat" ? { color: "#132833" } : undefined
+              }
+              aria-hidden
+            >
+              {platform.mark}
+            </span>
+            <span className="platform-copy">
+              <span className="platform-name">{platform.name}</span>
+              <span className="platform-hint">Open the real app</span>
+            </span>
+            <span className="platform-open-btn">Open</span>
+          </button>
+          <a className="platform-vault-link" href={`/hub/app/${platform.id}`}>
+            Saved login
+          </a>
+        </div>
       ))}
     </div>
   );

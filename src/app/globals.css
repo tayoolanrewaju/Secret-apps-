@@ -291,9 +291,27 @@ select {
   gap: 0.75rem;
 }
 
-a.platform-tile {
+.platform-tile-wrap {
+  display: grid;
+  gap: 0.45rem;
+}
+
+a.platform-tile,
+button.platform-tile {
   text-decoration: none;
   color: inherit;
+  width: 100%;
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+.platform-vault-link {
+  justify-self: start;
+  color: var(--muted);
+  font-size: 0.88rem;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
 .platform-tile {
@@ -332,7 +350,8 @@ a.platform-tile {
   font-weight: 700;
 }
 
-.platform-tile:hover {
+.platform-tile:hover,
+.platform-tile.is-pressed {
   transform: translateY(-1px);
   border-color: color-mix(in oklab, var(--accent) 40%, var(--ink) 8%);
   box-shadow: 0 10px 24px rgba(16, 38, 47, 0.06);
