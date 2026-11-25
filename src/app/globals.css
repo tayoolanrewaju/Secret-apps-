@@ -291,27 +291,15 @@ select {
   gap: 0.75rem;
 }
 
-.platform-tile-wrap {
-  display: grid;
-  gap: 0.45rem;
-}
-
-a.platform-tile,
-button.platform-tile {
+a.platform-tile {
   text-decoration: none;
   color: inherit;
   width: 100%;
   font: inherit;
   cursor: pointer;
   appearance: none;
-}
-
-.platform-vault-link {
-  justify-self: start;
-  color: var(--muted);
-  font-size: 0.88rem;
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .platform-tile {

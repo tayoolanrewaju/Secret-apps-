@@ -46,17 +46,7 @@ export function isPlatformId(value: string): value is PlatformId {
   return PLATFORMS.some((platform) => platform.id === value);
 }
 
-/** Try the native scheme, then fall back to HTTPS (Universal Links / website). */
-export function openPlatformApp(platform: Pick<Platform, "deepLink" | "webUrl">) {
-  const started = Date.now();
-  try {
-    window.location.href = platform.deepLink;
-  } catch {
-    // Some hosts block custom schemes; HTTPS path below still runs.
-  }
-  window.setTimeout(() => {
-    if (Date.now() - started < 1800) {
-      window.location.href = platform.webUrl;
-    }
-  }, 900);
+/** In-site Orbit path for a platform app page (full document navigation). */
+export function platformAppPath(platformId: PlatformId): string {
+  return `/hub/app/${platformId}`;
 }
