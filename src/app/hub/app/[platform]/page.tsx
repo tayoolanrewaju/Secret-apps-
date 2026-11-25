@@ -16,8 +16,8 @@ export default async function PlatformAppPage({
 
   return (
     <HubShell
-      title={`${platform.name}`}
-      subtitle={`Open the real ${platform.name} app, or unlock your saved login below.`}
+      title={`${platform.name} app`}
+      subtitle={`You opened the ${platform.name} page inside Orbit — not an external app.`}
       active="home"
     >
       <PlatformAppPanel platform={platform} />

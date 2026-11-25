@@ -8,7 +8,7 @@ import {
   VERIFIER_PAYLOAD,
 } from "@/lib/crypto";
 import { readApiError } from "@/lib/api-error";
-import { openPlatformApp, type Platform } from "@/lib/platforms";
+import type { Platform } from "@/lib/platforms";
 import { getVaultPin, setVaultPin } from "@/lib/vault-session";
 
 type VaultState =
@@ -233,28 +233,17 @@ export function PlatformAppPanel({ platform }: { platform: Platform }) {
           </div>
         </div>
         <p>
-          Tap the button below to leave Orbit and open the real {platform.name}{" "}
-          app on your phone (needs the official app installed). Use the vault
-          section for saved logins.
+          This is your {platform.name} page inside Orbit. Unlock the vault below
+          to save or reveal a login for this platform.
         </p>
         <div className="cta-row" style={{ marginTop: "1rem" }}>
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={() => openPlatformApp(platform)}
-          >
-            Open {platform.name} app
-          </button>
-          <a href="#vault-panel" className="btn-ghost">
-            Use vault
+          <a href="#vault-panel" className="btn-primary">
+            Use {platform.name} vault
+          </a>
+          <a href="/hub" className="btn-ghost">
+            Back to Home
           </a>
         </div>
-        <p className="muted" style={{ marginTop: "0.75rem" }}>
-          Or open in browser:{" "}
-          <a href={platform.webUrl} target="_blank" rel="noopener noreferrer">
-            {platform.webUrl.replace("https://", "")}
-          </a>
-        </p>
       </div>
 
       <div className="platform-app-actions">
